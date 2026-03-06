@@ -17,6 +17,13 @@ vim.api.nvim_create_autocmd('TermOpen', {
   end,
 })
 
+vim.keymap.set("n", "<space>st", function()
+  vim.cmd.vnew()
+  vim.cmd.term()
+  vim.cmd.wincmd("J")
+  vim.api.nvim_win_set_height(0, 8)
+end)
+
 -- Line numbering
 vim.opt.number = true         -- absolute line numbers
 vim.opt.relativenumber = true -- relative line numbers
