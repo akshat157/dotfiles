@@ -3,3 +3,9 @@
 A colleciton of my dotfiles for all the software that I use.
 An automated script for the installation coming soon!
 Note: Dotfiles for tmux and vim go into the home directory.
+
+## Dependencies
+
+- rust_analyzer
+- qmlls
+- lua_ls
