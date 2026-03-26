@@ -58,3 +58,5 @@ vim.opt.listchars = {
   tab = "▸ ",
   trail = "-",
 }
+
+vim.opt.runtimepath:append(vim.fn.stdpath("data") .. "/site")

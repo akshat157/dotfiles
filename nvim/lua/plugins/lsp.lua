@@ -36,6 +36,14 @@ return {
       })
       vim.lsp.enable("rust_analyzer")
 
+      -- QML LS
+      vim.lsp.config("qmlls", {
+        cmd_env = {
+          QML_IMPORT_PATH = "/usr/lib/qt6/qml",
+        },
+      })
+      vim.lsp.enable("qmlls")
+
       -- Autoformatting
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('my.lsp', {}),
