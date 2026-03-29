@@ -1,1 +1,2 @@
-singleton Time 1.0 Time.qml
+module services
+singleton DateTime 1.0 DateTime.qml

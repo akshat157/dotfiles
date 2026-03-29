@@ -2,22 +2,24 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell.Services.Pipewire
 
+import "core"
+
 Item {
     id: root
-    implicitWidth: Math.max(64, content.implicitWidth) + 16
+    implicitWidth: Math.max(64, content.implicitWidth) + Theme.padding2
     implicitHeight: parent.height
 
     property PwNode sink: Pipewire.defaultAudioSink
 
     Rectangle {
         anchors.fill: parent
-        radius: 16
-        color: "#F7FFF7"
+        radius: Theme.radius
+        color: Theme.background
     }
     RowLayout {
         id: content
         anchors.centerIn: parent
-        spacing: 4
+        spacing: Theme.spacing1
 
         Text {
             Layout.alignment: Qt.AlignVCenter
@@ -27,15 +29,24 @@ Item {
                     return "";
                 if (audio.muted)
                     return "";   // muted icon
-                if (audio.volume < 0.3)
+                if (audio.volume < 0.33)
                     return "";
-                if (audio.volume < 0.7)
+                if (audio.volume < 0.65)
                     return "";
                 return "";
             }
-            color: "#1A535C"
-            font.family: "0xProto Nerd Font"
+            color: Theme.primary
+            font.family: Theme.fontFamily
             font.pixelSize: 18
+
+            MouseArea {
+                anchors.fill: parent
+
+                onClicked: {
+                    if (root.sink && root.sink.audio)
+                        root.sink.audio.muted = !root.sink.audio.muted;
+                }
+            }
         }
 
         Text {
@@ -48,25 +59,23 @@ Item {
 
                 return Math.round(vol * 100) + '%';
             }
-            color: "#1A535C"
-            font.pixelSize: 14
-            font.family: "0xProto Nerd Font"
+            color: Theme.primary
+            font.pixelSize: Theme.fontSize
+            font.family: Theme.fontFamily
             font.bold: true
         }
     }
 
     MouseArea {
         anchors.fill: parent
+        propagateComposedEvents: true
 
-        onClicked: {
-            if (root.sink && root.sink.audio)
-                root.sink.audio.muted = !root.sink.audio.muted;
-        }
+        onClicked: event => event.accepted = false
 
         onWheel: event => {
             if (!root.sink || !root.sink.audio)
                 return;
-            let delta = event.angleDelta.y > 0 ? 0.05 : -0.05;
+            let delta = event.angleDelta.y > 0 ? 0.01 : -0.01;
             let newVol = Math.max(0, Math.min(1.5, root.sink.audio.volume + delta));
             root.sink.audio.volume = newVol;
         }

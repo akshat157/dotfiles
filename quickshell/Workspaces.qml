@@ -2,24 +2,25 @@ import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Layouts
 
+import "core"
+
 Item {
     implicitWidth: workspaces.implicitWidth
     Rectangle {
         id: workspaces
         anchors.fill: parent
 
-        color: "#F7FFF7"
-        radius: 16
-        implicitWidth: rowLayout.implicitWidth + 16
+        color: Theme.background
+        radius: Theme.radius
+        implicitWidth: rowLayout.implicitWidth + Theme.padding2
 
         RowLayout {
             id: rowLayout
             anchors.centerIn: parent
-            spacing: 6
+            spacing: Theme.spacing1
 
             Repeater {
-                model: 8
-
+                model: Settings.maxWorkspaces
                 Rectangle {
                     required property int index
                     property var workspace: {
@@ -34,13 +35,13 @@ Item {
 
                     property bool isActive: Hyprland.focusedWorkspace?.id === (index + 1)
                     property bool hasWindows: workspace !== null
+                    property int size: 16
+                    Layout.preferredWidth: isActive ? size * 2 : size
+                    Layout.preferredHeight: size
 
-                    Layout.preferredWidth: isActive ? 32 : 16
-                    Layout.preferredHeight: 16
+                    radius: size / 2
 
-                    radius: 8
-
-                    color: hoverHandler.hovered ? (isActive ? '#AA1A535C' : (hasWindows ? '#771A535C' : '#221A535C')) : (isActive ? '#1A535C' : (hasWindows ? '#AA1A535C' : '#441A535C'))
+                    color: hoverHandler.hovered ? (isActive ? Theme.itemActiveHover : (hasWindows ? Theme.itemOccupiedHover : Theme.itemInactiveHover)) : (isActive ? Theme.itemActive : (hasWindows ? Theme.itemOccupied : Theme.itemInactive))
 
                     HoverHandler {
                         id: hoverHandler

@@ -2,30 +2,35 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell.Hyprland
 
+import "core"
+
 Item {
-  property bool hasActiveWindow: Hyprland.activeToplevel && Hyprland.activeToplevel.workspace.id === Hyprland.focusedWorkspace.id
+    property bool hasActiveWindow: Hyprland.activeToplevel && Hyprland.activeToplevel.workspace.id === Hyprland.focusedWorkspace.id
 
-  Layout.preferredWidth: 200
-  opacity: hasActiveWindow ? 1 : 0
-  Rectangle {
-    id: activeWindowTitle
-    visible: Hyprland.activeToplevel !== null
-    anchors.fill: parent
-    color: "#F7FFF7"
+    Layout.preferredWidth: 200
+    opacity: hasActiveWindow ? 1 : 0
+    Rectangle {
+        id: activeWindowTitle
+        visible: Hyprland.activeToplevel !== null
+        anchors.fill: parent
+        color: Theme.background
 
-    Text {
-      anchors.verticalCenter: parent.verticalCenter
-      anchors.left: parent.left
-      color: "#1A535C"
-      text: Hyprland.activeToplevel?.title || "No window"
-      elide: Text.ElideRight
-      width: parent.width - 20
-      horizontalAlignment: Text.AlignHCenter
+        Text {
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            color: Theme.primary
+            text: Hyprland.activeToplevel?.title || "No window"
+            font.family: Theme.fontFamily
+            elide: Text.ElideRight
+            width: parent.width - Theme.padding2
+            horizontalAlignment: Text.AlignHCenter
+        }
+        radius: Theme.radius
     }
-    radius: 16
-  }
 
-  Behavior on opacity {
-    NumberAnimation { duration: 250 }
-  }
+    Behavior on opacity {
+        NumberAnimation {
+            duration: 250
+        }
+    }
 }
