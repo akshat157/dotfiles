@@ -17,19 +17,23 @@ vim.api.nvim_create_autocmd('TermOpen', {
   end,
 })
 
-vim.keymap.set("n", "<space>st", function()
+vim.keymap.set("n", "<leader>st", function()
   vim.cmd.vnew()
   vim.cmd.term()
   vim.cmd.wincmd("J")
   vim.api.nvim_win_set_height(0, 8)
 end)
 
+vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename)
+vim.keymap.set("n", "gr", vim.lsp.buf.references)
+vim.keymap.set("n", "gd", vim.lsp.buf.definition)
+
 -- Line numbering
 vim.opt.number = true         -- absolute line numbers
 vim.opt.relativenumber = true -- relative line numbers
 
 -- Tabs and indentation
-vim.opt.tabstop = 4        -- how many spaces does aa tab count for
+vim.opt.tabstop = 4        -- how many spaces does a tab count for
 vim.opt.shiftwidth = 4     -- size of an indent
 vim.opt.expandtab = true   -- use spaces instead of tabs
 vim.opt.smartindent = true -- autoindent new lines
@@ -59,4 +63,5 @@ vim.opt.listchars = {
   trail = "-",
 }
 
+-- The following line doesn't seem to work correctly
 vim.opt.runtimepath:append(vim.fn.stdpath("data") .. "/site")

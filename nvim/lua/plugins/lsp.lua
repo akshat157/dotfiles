@@ -38,8 +38,9 @@ return {
 
       -- QML LS
       vim.lsp.config("qmlls", {
-        cmd_env = {
-          QML_IMPORT_PATH = "/usr/lib/qt6/qml",
+        cmd = {
+          "qmlls",
+          "-I", "/usr/lib/qt6/qml"
         },
       })
       vim.lsp.enable("qmlls")
