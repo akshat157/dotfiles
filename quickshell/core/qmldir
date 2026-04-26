@@ -1,0 +1,5 @@
+module core
+singleton MyPalette 1.0 MyPalette.qml
+singleton Theme 1.0 Theme.qml
+singleton Settings 1.0 Settings.qml
+singleton Formats 1.0 Formats.qml

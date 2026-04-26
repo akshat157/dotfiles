@@ -1,78 +1,79 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell.Services.Pipewire
+
+import "components"
+import "core"
+import "services"
 
 Item {
     id: root
-    implicitWidth: Math.max(64, content.implicitWidth) + 16
+    required property var parentWindow
+    implicitWidth: Math.max(64, content.implicitWidth) + Theme.padding2
     implicitHeight: parent.height
 
-    property PwNode sink: Pipewire.defaultAudioSink
+    property var sink: Audio.sink
 
     Rectangle {
         anchors.fill: parent
-        radius: 16
-        color: "#F7FFF7"
-    }
-    RowLayout {
-        id: content
-        anchors.centerIn: parent
-        spacing: 4
+        radius: Theme.radius
+        color: Theme.background
 
-        Text {
-            Layout.alignment: Qt.AlignVCenter
-            text: {
-                let audio = root.sink?.audio;
-                if (!audio)
-                    return "";
-                if (audio.muted)
-                    return "";   // muted icon
-                if (audio.volume < 0.3)
-                    return "";
-                if (audio.volume < 0.7)
-                    return "";
-                return "";
+        RowLayout {
+            id: content
+            anchors.centerIn: parent
+            spacing: Theme.spacing1
+
+            VolumeIcon {
+                sink: root.sink
+                color: Theme.primary
+                fontFamily: Theme.fontFamily
+                fontSize: 18
             }
-            color: "#1A535C"
-            font.family: "0xProto Nerd Font"
-            font.pixelSize: 18
-        }
 
-        Text {
-            Layout.alignment: Qt.AlignVCenter
-            text: {
-                let vol = root.sink?.audio?.volume;
-                if (vol === undefined || isNaN(vol)) {
-                    return "--%";
+            Text {
+                Layout.alignment: Qt.AlignVCenter
+                text: {
+                    let vol = root.sink?.audio?.volume;
+                    if (vol === undefined || isNaN(vol)) {
+                        return "--%";
+                    }
+
+                    return Math.round(vol * 100) + '%';
                 }
-
-                return Math.round(vol * 100) + '%';
+                color: Theme.primary
+                font.pixelSize: Theme.fontSize
+                font.family: Theme.fontFamily
+                font.bold: true
             }
-            color: "#1A535C"
-            font.pixelSize: 14
-            font.family: "0xProto Nerd Font"
-            font.bold: true
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            propagateComposedEvents: true
+
+            onClicked: popup.isOpen ? popup.close() : popup.open()
+
+            onWheel: event => {
+                if (!root.sink || !root.sink.audio)
+                    return;
+                let delta = event.angleDelta.y > 0 ? 0.01 : -0.01;
+                let newVol = Math.max(0, Math.min(1.5, root.sink.audio.volume + delta));
+                root.sink.audio.volume = newVol;
+            }
         }
     }
 
-    MouseArea {
-        anchors.fill: parent
+    StyledPopup {
+        id: popup
+        parentWin: root.parentWindow
+        anchorRectX: root.parentWindow.width - width
+        xOffset: -10
+        yOffset: 10
+        implicitWidth: 400
+        implicitHeight: 400
 
-        onClicked: {
-            if (root.sink && root.sink.audio)
-                root.sink.audio.muted = !root.sink.audio.muted;
+        MediaPopup {
+            anchors.fill: parent
         }
-
-        onWheel: event => {
-            if (!root.sink || !root.sink.audio)
-                return;
-            let delta = event.angleDelta.y > 0 ? 0.05 : -0.05;
-            let newVol = Math.max(0, Math.min(1.5, root.sink.audio.volume + delta));
-            root.sink.audio.volume = newVol;
-        }
-    }
-
-    PwObjectTracker {
-        objects: root.sink ? [root.sink] : []
     }
 }
