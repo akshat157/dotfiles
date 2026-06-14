@@ -1,4 +1,10 @@
-require("config.lazy")
+-- require("config.lazy")
+
+-- Make sure to setup `mapleader` and `maplocalleader` before
+-- loading lazy.nvim so that mappings are correct.
+-- This is also a good place to setup other settings (vim.opt)
+vim.g.mapleader = " "
+vim.g.maplocalleader = "\\"
 
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
@@ -27,7 +33,7 @@ end)
 vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename)
 vim.keymap.set("n", "gr", vim.lsp.buf.references)
 vim.keymap.set("n", "gd", vim.lsp.buf.definition)
-
+vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float)
 -- Line numbering
 vim.opt.number = true         -- absolute line numbers
 vim.opt.relativenumber = true -- relative line numbers
@@ -63,5 +69,16 @@ vim.opt.listchars = {
   trail = "-",
 }
 
--- The following line doesn't seem to work correctly
-vim.opt.runtimepath:append(vim.fn.stdpath("data") .. "/site")
+-- Folding
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldcolumn = "0"
+vim.opt.foldlevel = 99
+vim.opt.foldcolumn = "0"
+-- vim.opt.fillchars = {
+--   foldopen = "", -- arrow down
+--   foldclose = "", -- arrow right
+--   fold = " ",
+--   foldsep = " ",
+-- }
+vim.opt.foldenable = true
