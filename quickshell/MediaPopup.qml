@@ -54,7 +54,7 @@ Item {
                     target: root.sink?.audio ?? null
                     function onVolumeChanged() {
                         if (!slider.pressed)
-                            slider.currentVolume = root.sink.audio.volume * 100;
+                        slider.currentVolume = root.sink.audio.volume * 100;
                     }
                 }
 
@@ -64,12 +64,12 @@ Item {
 
                 onMoved: {
                     if (!root.sink?.audio)
-                        return;
+                    return;
 
                     let snapped = (Math.abs(value - snapPoint) <= snapThreshold) ? snapPoint : value;
 
                     if (snapped !== value)
-                        value = snapped;
+                    value = snapped;
 
                     currentVolume = value;
                     root.sink.audio.volume = value / 100;
@@ -135,7 +135,7 @@ Item {
             function syncSelection() {
                 const idx = root.sinks.findIndex(s => s.name === Audio.sink?.name);
                 if (idx !== -1)
-                    currentIndex = idx;
+                currentIndex = idx;
             }
             onModelChanged: syncSelection()
 
@@ -158,7 +158,7 @@ Item {
             }
 
             indicator: Text {
-                text: ""
+                text: ""
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 anchors.rightMargin: width

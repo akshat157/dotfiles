@@ -43,6 +43,11 @@ Scope {
                     }
                     spacing: Theme.spacing1
 
+                    AppLauncherWidget {
+                        parentWindow: panelWindow
+                        Layout.fillHeight: true
+                    }
+
                     Workspaces {
                         Layout.fillHeight: true
                     }

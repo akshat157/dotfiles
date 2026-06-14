@@ -36,7 +36,7 @@ Item {
 
             TapHandler {
                 onTapped: {
-                    Hyprland.dispatch(`closewindow address:0x${lastWindow.address}`);
+                    Hyprland.dispatch(`hl.dsp.window.close()`);
                 }
             }
         }
