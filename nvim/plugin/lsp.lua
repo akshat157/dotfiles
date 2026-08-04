@@ -35,29 +35,16 @@ vim.lsp.config("rust_analyzer", {
 vim.lsp.enable("rust_analyzer")
 
 -- QML LS
--- vim.lsp.config("qmlls", {
---   cmd = {
---     "qmlls",
---     "-I", "/usr/lib/qt6/qml"
---   },
---   filetypes = {
---     "qml",
---   }
--- })
--- vim.lsp.enable("qmlls")
-
--- QML Language Server
--- vim.lsp.config("qml-language-server", {
---   cmd = { "qml-language-server" },
---   filetypes = { "qml" },
---   root_dir = function(bufnr, on_dir)
---     local fname = vim.api.nvim_buf_get_name(bufnr)
---     local root = vim.fs.root(fname, { { "shell.qml", "qmldir" }, ".git" })
---     if root and vim.fs.ext(fname) == "qml" then
---       on_dir(root)
---     end
---   end,
--- })
+vim.lsp.config("qmlls", {
+  cmd = {
+    "qmlls",
+    "-I", "/usr/lib/qt6/qml"
+  },
+  filetypes = {
+    "qml",
+  }
+})
+vim.lsp.enable("qmlls")
 
 -- QML Language Server
 vim.lsp.config("qml-language-server", {
@@ -97,6 +84,7 @@ vim.lsp.config("clangd", {
 })
 vim.lsp.enable("clangd")
 
+-- YAML LS
 vim.lsp.config("yamlls", {
   settings = {
     yaml = {
@@ -114,6 +102,19 @@ vim.lsp.config("yamlls", {
 })
 
 vim.lsp.enable("yamlls")
+
+-- tinymist for typst
+vim.lsp.config("tinymist", {
+  cmd = { "tinymist" },
+  filetypes = { "typst" },
+  settings = {
+    formatterMode = "typstyle",
+    exportPdf = "onType",
+    semanticTokens = "disable"
+  }
+})
+
+vim.lsp.enable("tinymist")
 
 -- Autoformatting
 vim.api.nvim_create_autocmd('LspAttach', {
