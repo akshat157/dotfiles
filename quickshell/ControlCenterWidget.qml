@@ -7,7 +7,10 @@ import "components"
 
 Item {
     id: root
+
     property string username
+    property string hostname
+
     required property var parentWindow
     implicitWidth: content.implicitWidth + Theme.padding2
     implicitHeight: parent.height
@@ -28,7 +31,7 @@ Item {
         anchors.centerIn: parent
 
         Text {
-            text: root.username
+            text: root.hostname
             font.family: Theme.fontFamily
             font.bold: true
             color: Theme.textPrimary
@@ -45,7 +48,7 @@ Item {
         implicitWidth: 300
         implicitHeight: 400
 
-        Rectangle {
+        ControlCenterPopup {
             anchors.fill: parent
         }
     }
@@ -56,6 +59,15 @@ Item {
         running: true
         stdout: SplitParser {
             onRead: data => root.username = data.trim()
+        }
+    }
+
+    Process {
+        id: hostnameProc
+        command: ["cat", "/etc/hostname"]
+        running: true
+        stdout: SplitParser {
+            onRead: data => root.hostname = data.trim()
         }
     }
 }

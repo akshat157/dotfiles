@@ -3,11 +3,13 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "services"
+
 import "core"
+import "services"
 
 Item {
     id: root
+
     Rectangle {
         anchors.fill: parent
         radius: Theme.radius
@@ -36,6 +38,7 @@ Item {
                         font.family: Theme.fontFamily
                         Layout.alignment: Qt.AlignLeft
                     }
+
                     Text {
                         color: Theme.primary
                         text: DateTime.dateStr
@@ -57,22 +60,66 @@ Item {
                     RowLayout {
                         spacing: Theme.spacing2
                         Layout.alignment: Qt.AlignHCenter
-                        Text {
-                            color: Theme.primary
-                            text: "󰒮"
-                            font.pixelSize: 16
+
+                        Button {
+                            id: monthBtn
+                            implicitHeight: parent.height
+                            Layout.fillWidth: true
+                            background: Rectangle {
+                                color: monthBtn.pressed ? Theme.primarySubtle : monthBtn.hovered ? Theme.primarySubtle : Theme.primaryGhost
+                                radius: Theme.radius
+                            }
+
+                            Text {
+                                anchors.centerIn: parent
+                                color: Theme.primary
+                                text: grid.currentMonth + " " + DateTime.year
+                                font.pixelSize: 12
+                                font.family: Theme.fontFamily
+                                horizontalAlignment: Text.AlignHCenter
+                            }
                         }
-                        Text {
-                            color: Theme.primary
-                            text: DateTime.dateStr
-                            font.pixelSize: 12
-                            font.family: Theme.fontFamily
-                            Layout.alignment: Qt.AlignLeft
+
+                        Button {
+                            id: btn
+                            background: Rectangle {
+                                implicitWidth: 32
+                                color: btn.pressed ? Theme.primarySubtle : btn.hovered ? Theme.primarySubtle : Theme.primaryGhost
+                                radius: Theme.radius
+                            }
+
+                            contentItem: Text {
+                                color: Theme.primary
+                                text: ""
+                                font.pixelSize: 16
+                                horizontalAlignment: Text.AlignHCenter
+                                elide: Text.ElideRight
+                            }
+
+                            onClicked: () => {
+                                grid.currentMonth = grid.currentMonth - 1;
+                            }
                         }
-                        Text {
-                            color: Theme.primary
-                            text: "󰒭"
-                            font.pixelSize: 16
+
+                        Button {
+                            id: btn2
+                            background: Rectangle {
+                                implicitWidth: 32
+                                color: btn2.pressed ? Theme.primarySubtle : btn2.hovered ? Theme.primarySubtle : Theme.primaryGhost
+                                radius: Theme.radius
+                            }
+
+                            contentItem: Text {
+                                color: Theme.primary
+                                text: ""
+                                font.pixelSize: 16
+                                horizontalAlignment: Text.AlignHCenter
+                                elide: Text.ElideRight
+                            }
+
+                            onClicked: () => {
+                                grid.currentMonth = grid.currentMonth + 1;
+                            }
                         }
                     }
                     RowLayout {

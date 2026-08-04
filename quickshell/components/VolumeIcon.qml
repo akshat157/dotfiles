@@ -1,6 +1,6 @@
 import QtQuick
 
-import "services"
+import "../services"
 
 Item {
     id: root
@@ -18,19 +18,20 @@ Item {
         text: {
             let audio = root.sink?.audio;
             if (!audio)
-                return "";
+            return "";
             if (audio.muted)
-                return "";
+            return "";
             if (audio.volume < 0.33)
-                return "";
+            return "";
             if (audio.volume < 0.67)
-                return "";
+            return "";
             return "";
         }
         color: root.color
         font.family: root.fontFamily
         font.pixelSize: root.fontSize
     }
+
     MouseArea {
         anchors.fill: parent
         onClicked: Audio.toggleMute()

@@ -1,4 +1,6 @@
 module components
 
 StyledPopup 1.0 StyledPopup.qml
-
+VolumeIcon 1.0 VolumeIcon.qml
+ControlButton 1.0 ControlButton.qml
+StyledButton 1.0 StyledButton.qml

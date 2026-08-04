@@ -1,8 +1,10 @@
 pragma ComponentBehavior: Bound
 
-import Quickshell
 import QtQuick
 import QtQuick.Layouts
+
+import Quickshell
+import Quickshell.Wayland
 
 import "core"
 
@@ -14,6 +16,7 @@ Scope {
         PanelWindow {
             id: panelWindow
 
+            WlrLayershell.namespace: "quickshell:bar"
             // screen from the screens list will be injected into this property
             required property var modelData
             property int panelMarginX: 10       // Expected to be same as the window margin of the window manager
@@ -27,13 +30,14 @@ Scope {
 
             implicitHeight: 32
 
-            color: "transparent"
+            color: "#01F7FFF7"
 
             Item {
                 anchors.fill: parent
                 anchors.topMargin: 4
-                anchors.leftMargin: panelMarginX
-                anchors.rightMargin: panelMarginX
+                anchors.bottomMargin: 4
+                anchors.leftMargin: panelWindow.panelMarginX
+                anchors.rightMargin: panelWindow.panelMarginX
                 // LEFT
                 RowLayout {
                     anchors {
@@ -83,12 +87,12 @@ Scope {
                         Layout.fillHeight: true
                     }
 
-                    VolumeWidget {
+                    MediaWidget {
                         parentWindow: panelWindow
                         Layout.fillHeight: true
                     }
 
-                    UserWidget {
+                    ControlCenterWidget {
                         parentWindow: panelWindow
                         Layout.fillHeight: true
                     }

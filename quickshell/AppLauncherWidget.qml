@@ -1,12 +1,12 @@
 import QtQuick
 import QtQuick.Layouts
 
+import Quickshell
+
 import "core"
-import "components"
 
 Item {
-    id: root
-    required property var parentWindow
+    property var parentWindow
 
     Layout.preferredWidth: 32
 
@@ -19,8 +19,9 @@ Item {
 
         TapHandler {
             acceptedButtons: Qt.LeftButton
-            onTapped: function() {
-                console.log("clicked!")
+            onTapped: function () {
+                // TODO: replace with custom launcher
+                Quickshell.execDetached(["rofi", "-show", 'drun']);
             }
         }
     }

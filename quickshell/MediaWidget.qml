@@ -55,7 +55,7 @@ Item {
 
             onWheel: event => {
                 if (!root.sink || !root.sink.audio)
-                    return;
+                return;
                 let delta = event.angleDelta.y > 0 ? 0.01 : -0.01;
                 let newVol = Math.max(0, Math.min(1.5, root.sink.audio.volume + delta));
                 root.sink.audio.volume = newVol;
