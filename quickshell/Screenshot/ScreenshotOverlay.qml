@@ -18,11 +18,6 @@ PanelWindow {
     // WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
     // WlrLayershell.exclusiveZone: -1
 
-    Keys.onPressed: event => {
-        if (event.key === Qt.Key_Escape) {
-            screenshotOverlayRoot.hide();
-        }
-    }
     function show() {
         Globals.screenshotOverlayOpen = true;
     }
@@ -32,15 +27,16 @@ PanelWindow {
         // The line below resets that submap when the screenshotOverlay is hidden.
         Quickshell.execDetached(["hyprctl", "eval", "hl.dispatch(hl.dsp.submap(\"reset\"))"]);
         Globals.screenshotOverlayOpen = false;
+        selectionRegion.reset();
     }
 
     IpcHandler {
         target: "screenshotOverlay"
-
         function toggle(): void {
             Globals.screenshotOverlayOpen ? screenshotOverlayRoot.hide() : screenshotOverlayRoot.show();
         }
     }
+
     anchors {
         left: true
         right: true
@@ -54,6 +50,13 @@ PanelWindow {
         property point startPoint
         property rect selection
         property bool isSelecting: false
+
+        focus: true
+        Keys.onPressed: event => {
+            if (event.key === Qt.Key_Escape) {
+                screenshotOverlayRoot.hide();
+            }
+        }
 
         function begin(p: point) {
             selectionRegion.isSelecting = true;
@@ -78,15 +81,32 @@ PanelWindow {
         }
 
         function finish() {
-            const x = selectionRegion.finalX;
-            const y = selectionRegion.finalY;
-            const w = selectionRegion.finalWidth;
-            const h = selectionRegion.finalHeight;
-            const shotRegion = `${x},${y} ${w}x${h}`;
-            const filePath = "$(xdg-user-dir PICTURES)" + "/" + "$(date)" + "%s.png";
+            const x = Math.floor(selectionRegion.finalX);
+            const y = Math.floor(selectionRegion.finalY);
+            const w = Math.floor(selectionRegion.finalWidth);
+            const h = Math.floor(selectionRegion.finalHeight);
 
-            Quickshell.execDetached(["sh", "-c", "grim", "-g", shotRegion, filePath]);
+            if (w < 2 || h < 2)
+            return;
+
+            const region = `${x},${y} ${w}x${h}`;
+            const picturesPath = Quickshell.env("XDG_PICTURES_DIR") || (Quickshell.env("HOME") + "/Pictures");
+            const filePath = `${picturesPath}/Screenshot_${new Date().toISOString()}.png`;
+
             screenshotOverlayRoot.hide();
+
+            Qt.callLater(() => {
+                    Quickshell.execDetached(["grim", "-g", "-q", "100", region, filePath]);
+            });
+        }
+
+        function reset() {
+            selectionRegion.startWidth = 0;
+            selectionRegion.startHeight = 0;
+            selectionRegion.finalX = 0;
+            selectionRegion.finalY = 0;
+            selectionRegion.finalWidth = 0;
+            selectionRegion.finalHeight = 0;
         }
 
         property real startWidth: 0
